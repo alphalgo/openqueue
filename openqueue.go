@@ -39,7 +39,7 @@ type Openqueue interface {
 	IsEmpty() bool
 	Check(err error)
 	IsExist(e *Elem) bool
-	SetMap(e *Elem) bool
+	SetMap(e *Elem, v []interface{}) bool
 	GetMap(index int) (*Elem, []interface{})
 	Delete(index int)
 	Destory(index int)
@@ -153,10 +153,9 @@ func (o Oqueue) IsExist(e *Elem) bool {
 	return false
 }
 
-// When openqueue's lence status is true, we turn down the entrance
-// and start to mapping elements, but it just a little complicated,
-// I cannot figured out it, so just wait a moment.
-func (o Oqueue) SetMap(e *Elem) (mapped []bool) {
+// When openqueue's fence status is true, we turn down the entrance
+// and start to mapping elements.
+func (o Oqueue) SetMap(e *Elem, v []interface{}) (mapped []bool) {
 	for k := 0; k < o.size; k++ {
 		if !o.fenced[k] {
 			mapped[k] = false
@@ -169,7 +168,7 @@ func (o Oqueue) SetMap(e *Elem) (mapped []bool) {
 	// But I don't know whether the related resource means some
 	// requests or connections or other stuffs which we can processed.
 	// So, in here, we use null interface slice, refactor later.
-	o.__map[e] = []interface{}{}
+	o.__map[e] = v 
 
 	return
 }
