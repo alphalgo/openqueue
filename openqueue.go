@@ -20,7 +20,7 @@ type Oqueue struct {
 	fenced    []bool
 	size      int
 	begin     int
-	buttom    []*Elem
+	bottom    []*Elem
 	top       []*Elem
 	empty     bool
 	mapped    bool
@@ -32,7 +32,7 @@ type Openqueue interface {
 	init()
 	Size() int
 	List() []*Elem
-	GetButtom(index int) *Elem
+	GetBottom(index int) *Elem
 	GetTop(index int) *Elem
 	AddElem(e *Elem) bool
 	RemoveElem(e *Elem) bool
@@ -50,7 +50,7 @@ func (o Oqueue) init() {
 	o.exited = true
 	for i := 0; i < o.size; i++ {
 		o.fenced[i] = false
-		o.buttom[i] = nil
+		o.bottom[i] = nil
 		o.top[i] = nil
 	}
 	o.size = 0
@@ -76,15 +76,15 @@ func (o Oqueue) List() []*Elem {
 	return store
 }
 
-func (o Oqueue) GetButtom(index int) *Elem {
+func (o Oqueue) GetBottom(index int) *Elem {
 	if index < 0 {
 		o.exited = false
-		return o.buttom[o.size+index]
+		return o.bottom[o.size+index]
 	} else if index == 0 {
 		log.Fatalf("Index cannot be zero!")
 	}
 	o.entranced = false
-	return o.buttom[index]
+	return o.bottom[index]
 }
 
 func (o Oqueue) GetTop(index int) *Elem {
@@ -168,7 +168,7 @@ func (o Oqueue) SetMap(e *Elem, v []interface{}) (mapped []bool) {
 	// But I don't know whether the related resource means some
 	// requests or connections or other stuffs which we can processed.
 	// So, in here, we use null interface slice, refactor later.
-	o.__map[e] = v 
+	o.__map[e] = v
 
 	return
 }
