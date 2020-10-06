@@ -6,7 +6,7 @@ package openqueue
 //
 
 import (
-	"log"
+    log "github.com/sirupsen/logrus"
 )
 
 type Elem struct {
@@ -81,7 +81,7 @@ func (o Oqueue) GetBottom(index int) *Elem {
 		o.exited = false
 		return o.bottom[o.size+index]
 	} else if index == 0 {
-		log.Fatalf("Index cannot be zero!")
+		log.Warnf("Index cannot be zero!")
 	}
 	o.entranced = false
 	return o.bottom[index]
@@ -92,7 +92,7 @@ func (o Oqueue) GetTop(index int) *Elem {
 		o.exited = false
 		return o.top[o.size+index]
 	} else if index == 0 {
-		log.Fatalf("Index cannot be zero!")
+		log.Warnf("Index cannot be zero!")
 	}
 	o.entranced = false
 	return o.top[index]
@@ -101,7 +101,7 @@ func (o Oqueue) GetTop(index int) *Elem {
 func (o Oqueue) AddElem(e *Elem) (added bool) {
 	if e.position < 0 || e.position > o.size {
 		added = false
-		log.Fatalf("Cannot add element cause of invalid index.")
+		log.Warnf("Cannot add element cause of invalid index.")
 	}
 
 	if o.empty {
@@ -132,7 +132,7 @@ func (o Oqueue) RemoveElem(e *Elem) (removed bool) {
 func (o Oqueue) IsEmpty() bool {
 	if o.empty {
 		return true
-		log.Fatalf("Openqueue is empty, please add some elements.")
+		log.Warnf("Openqueue is empty, please add some elements.")
 	}
 	return false
 }
@@ -176,7 +176,7 @@ func (o Oqueue) SetMap(e *Elem, v []interface{}) (mapped []bool) {
 // getMap gets the value mapped by index and return it's mapping value.
 func (o Oqueue) GetMap(index int) (e *Elem, v []interface{}) {
 	if index < 0 || index > o.size {
-		log.Fatalf("Invalid index.")
+		log.Warnf("Invalid index.")
 	}
 	e = o._map[index]
 	v = o.__map[e]
@@ -192,10 +192,10 @@ func (o Oqueue) GetMap(index int) (e *Elem, v []interface{}) {
 //		3) we can delete element from begin or end point
 func (o Oqueue) Destory(index int) {
 	if !o._map[index].allocated {
-		log.Fatalf("This position have no element, you needn't to delete it!")
+		log.Warnf("This position have no element, you needn't to delete it!")
 	}
 	if !o.IsExist(o._map[index-1]) && o.IsExist(o._map[index]) {
-		log.Fatalf("Invalid request, impossible!")
+		log.Warnf("Invalid request, impossible!")
 	}
 	delete(o._map, index)
 	delete(o.__map, o._map[index])
