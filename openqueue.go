@@ -39,10 +39,10 @@ type Openqueue interface {
 	IsEmpty() bool
 	Check(err error)
 	IsExist(e *Elem) bool
-	SetMap(e *Elem, v []interface{}) bool
+	SetMap(e *Elem, v ...interface{}) bool
 	GetMap(index int) (*Elem, []interface{})
 	Delete(index int)
-	Destory(index int)
+	Destroy(index int)
 }
 
 func (o Oqueue) init() {
@@ -122,7 +122,7 @@ func (o Oqueue) RemoveElem(e *Elem) (removed bool) {
 	}
 
 	if o._map[e.position] != nil {
-		o.Destory(e.position)
+		o.Destroy(e.position)
 	}
 	removed = true
 	return
@@ -155,7 +155,7 @@ func (o Oqueue) IsExist(e *Elem) bool {
 
 // When openqueue's fence status is true, we turn down the entrance
 // and start to mapping elements.
-func (o Oqueue) SetMap(e *Elem, v []interface{}) (mapped []bool) {
+func (o Oqueue) SetMap(e *Elem, v ...interface{}) (mapped []bool) {
 	for k := 0; k < o.size; k++ {
 		if !o.fenced[k] {
 			mapped[k] = false
@@ -168,7 +168,10 @@ func (o Oqueue) SetMap(e *Elem, v []interface{}) (mapped []bool) {
 	// But I don't know whether the related resource means some
 	// requests or connections or other stuffs which we can processed.
 	// So, in here, we use null interface slice, refactor later.
-	o.__map[e] = v
+    if len(v) > 0 {
+        o.__map[e] = v[0].([]interface{})
+    }
+    o.__map[e] = v
 
 	return
 }
@@ -190,7 +193,7 @@ func (o Oqueue) GetMap(index int) (e *Elem, v []interface{}) {
 //		1) the element's memory cannot occupied before the occupied one
 //		2) the map full of elements, we just delete the index mapped to
 //		3) we can delete element from begin or end point
-func (o Oqueue) Destory(index int) {
+func (o Oqueue) Destroy(index int) {
 	if !o._map[index].allocated {
 		log.Warnf("This position have no element, you needn't to delete it!")
 	}
@@ -206,8 +209,8 @@ func (o Oqueue) Destory(index int) {
 func (o Oqueue) Delete(index int) {
 	if index < 0 {
 		o.entranced = false
-		o.Destory(index)
+		o.Destroy(index)
 	}
 	o.exited = false
-	o.Destory(index)
+	o.Destroy(index)
 }
