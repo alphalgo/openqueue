@@ -4,7 +4,7 @@
 
 Openqueue have similarity with openstack in some cases, which is an open data structure expanded from common queue. To itself I added fence and other fields to make itself more expansibility. But I haven't test it fully yet, so don't expect much more.
 
-And if you want to more about it, here the [thought](https://github.com/i0Ek3/p0ints/blob/master/2020.0828-openqueue.md) please.
+And if you want to know more about it, here the [thought](https://github.com/i0Ek3/p0ints/blob/master/2020.0828-openqueue.md) please.
 
 ## License
 
