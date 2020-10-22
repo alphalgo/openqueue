@@ -9,11 +9,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Elem defines the element of oqueue
 type Elem struct {
 	position  int
 	allocated bool
 }
 
+// Oqueue defines the queue object
 type Oqueue struct {
 	entranced bool
 	exited    bool
@@ -28,6 +30,7 @@ type Oqueue struct {
 	__map     map[*Elem][]interface{}
 }
 
+// Openqueue defines the oqueue interface
 type Openqueue interface {
 	init()
 	Size() int
@@ -59,6 +62,7 @@ func (o *Oqueue) init() {
 	o.mapped = false
 }
 
+// Size gets the size of oqueue
 func (o *Oqueue) Size() int {
 	if o.empty {
 		return 0
@@ -66,6 +70,7 @@ func (o *Oqueue) Size() int {
 	return o.size
 }
 
+// List shows the element of oqueue
 func (o *Oqueue) List() []*Elem {
 	store := make([]*Elem, o.size)
 	if !o.IsEmpty() {
@@ -76,6 +81,7 @@ func (o *Oqueue) List() []*Elem {
 	return store
 }
 
+// GetBottom gets the bottom of oqueue
 func (o *Oqueue) GetBottom(index int) *Elem {
 	if index < 0 {
 		o.exited = false
@@ -87,6 +93,7 @@ func (o *Oqueue) GetBottom(index int) *Elem {
 	return o.bottom[index]
 }
 
+// GetTop gets the top of oqueue
 func (o *Oqueue) GetTop(index int) *Elem {
 	if index < 0 {
 		o.exited = false
@@ -98,6 +105,7 @@ func (o *Oqueue) GetTop(index int) *Elem {
 	return o.top[index]
 }
 
+// AddElem adds the element to oqueue
 func (o *Oqueue) AddElem(e *Elem) (added bool) {
 	if e.position < 0 || e.position > o.size {
 		added = false
@@ -116,6 +124,7 @@ func (o *Oqueue) AddElem(e *Elem) (added bool) {
 	return
 }
 
+// RemoveElem removes the element from oqueue
 func (o *Oqueue) RemoveElem(e *Elem) (removed bool) {
 	if o.empty {
 		removed = false
@@ -137,6 +146,7 @@ func (o *Oqueue) IsEmpty() bool {
 	return false
 }
 
+// Check checks if err
 func (o *Oqueue) Check(err error) {
 	if err != nil {
 		panic(err)
